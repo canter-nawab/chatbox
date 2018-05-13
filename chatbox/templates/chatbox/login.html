@@ -1,0 +1,40 @@
+<!doctype html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Chatbox</title>
+    </head>
+
+    <body>
+        <form action="{% url 'chatbox:loggedin' %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="roll_no" id="roll_no"> <br>
+            <input type="text" name="username" id="user_name"> <br>
+            <input type="password" name="password" id="user_password"> <br>
+            <input type="submit" value="Enter" id="login">
+        </form>
+    </body>
+
+    <script>
+            document.querySelector('#user_password').onblur = function() {
+                var original = document.queryselector('#user_password').value;
+            };
+
+           /* document.querySelector('#login').onclick = function (e) {
+                documen
+            };*/
+            /*document.querySelector('#roll_no').onkeyup = function(e){
+                if (e.keyCode === 13) {
+                    e.keycode = 8;
+                    document.querySelector('#user_name').focus();
+                }
+            };
+            document.querySelector('#user_name').onkeyup = function(e) {
+                if (e.keyCode === 13) {  // enter, return
+                    e.keycode = 8;
+                    document.querySelector('#login').click();
+                }
+            };*/
+    </script>
+</html>

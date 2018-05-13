@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Conversations</title>
+</head>
+<body>
+    <h1>Welcome {{ user.user_name }}</h1>
+    {% if conversations and ids %}
+    <ul>
+        {% for (conversation, convo_id) in zip(conversations, ids) %}
+            <li onclick = goto(this); id= {{ convo_id }}>{{ conversation }}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        No Conversations Found. <a href="{% url 'chatbox:new_convo' %}" id="new_convo">Start a new one.</a> <br>
+    {% endif %}
+</body>
+<script>
+    var goto = function (convo) {
+        var roomName = convo.id;
+        window.location.pathname = '/chatbox/' + roomName + '/';
+    };
+</script>
+</html>

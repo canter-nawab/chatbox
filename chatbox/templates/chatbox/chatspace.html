@@ -1,0 +1,30 @@
+<!doctype html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Chatbox</title>
+    </head>
+    <body>
+        <p>
+            Welcome {{ user.user_name }}.<br>
+        </p>
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.user.roll_no == user.roll_no %}
+                    <textarea id="chat-log" cols="100" rows="20" readonly="readonly"></textarea><br/>
+                    <span style='color:red; text-align:right'> {{ message.message }} </br></span>
+                {% else %}
+                    <span style='color:blue; text-align:left'> {{ message.message }} <br></span>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p></p>
+        {% endif %}
+        <form action="{% url 'chatbox:messages' %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="message_box" id="message" placeholder="type your message here" value=null>
+            <input type="submit" value="Send" id="sendmsg">
+        </form>
+    </body>
+</html>

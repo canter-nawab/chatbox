@@ -1,0 +1,130 @@
+<!-- chat/templates/chat/room.html -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Chat Room</title>
+</head>
+<body>
+    <h1>Welcome {{ user.user_name }}</h1><br>
+    <div id="chatroom">
+        <p id="online_users">
+            <ul id="online">
+
+            </ul>
+            <!--{% if user_list%}
+                {% for user in user_list %}
+                    {{ user }} is online. <br>
+                {% endfor %}
+            {% endif %}-->
+        </p>
+    </div>
+    <div style="width:80%; max-width:1000px; height:400px; max-height:400px; overflow:auto">
+        <ul id="chat-log" style="list-style-type:none; width:inherit; padding:0px; margin:0px">
+            
+        </ul>
+    </div>
+    <input id="chat-message-input" type="text" size="100"/><br/>
+    <input id="chat-message-submit" type="button" value="Send"/>
+</body>
+<script>
+    var roomName = {{ room_name_json }};
+    var current_user = {{ user_ob }};
+    var chatSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/chatbox/' + roomName + '/'
+        );
+    
+    /*var onlineSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/chatbox/' + roomName + '/'
+        );*/
+    
+    chatSocket.onopen = function(e) {
+        document.querySelector('#online_users').innerHTML += ('online...<br>');
+        chatSocket.send(JSON.stringify({
+            'message': None,
+            'user': current_user
+        }));
+
+        var init = JSON.parse(e.data);
+        var connected_user = init['online'];
+        document.querySelector('#online').innerHTML = '';
+        for (users in connected_user) {
+            document.querySelector('#online').innerHTML += ('<li style="color:green" id="' + connected_user[users] + '">' + connected_user[users] + ' is online....' + '</li>');
+        }
+    };
+
+    chatSocket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var online = data['online'];
+        document.querySelector('#online').innerHTML = '';
+        for (users in online) {
+            document.querySelector('#online').innerHTML += ('<li style="color:green" id="' + online[users] +'">' + online[users] + ' is online.' + '</li>');
+        }
+
+        if (data['message']) {
+            var message = data['message'];
+            var sender = data['user'];
+            if (sender == current_user) {
+                document.querySelector('#chat-log').innerHTML += ('<li style="color:red; text-align:right">' + sender + ':' + message + '</li>');
+            }
+            else {
+                document.querySelector('#chat-log').innerHTML += ('<li style="color:blue; text-align:left">' + sender + ':' + message + '</li>');
+            }
+        }
+        
+    };
+
+    chatSocket.onclose = function(e) {
+        console.log('bye.....');
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        var messageInputDom = document.querySelector('#chat-message-input');
+        var message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'user': current_user
+        }));
+
+        messageInputDom.value = '';
+    };
+
+/*    onlineSocket.onopen = function(event) {
+        document.querySelector('#online_users').innerHTML += ('online...\n');
+        
+        onlineSocket.send(JSON.stringify({
+            'online_user': current_user
+        }));
+    };
+
+    onlineSocket.onmessage  = function(event) {
+        var users = JSON.parse(event.data);
+        document.querySelector('#online_users').innerHTML += ('online....\n');
+
+        if (users['connected']) {
+            var online = users['connected'];
+            for (user in online) {
+                document.querySelector('#online').innerHTML += ('<li style="color:green" id="' + user +'">' + user + ' is online.' + '</li>');
+            }
+        }
+    };
+
+    onlineSocket.onclose = function(event) {
+        document.queryselector('#'+ current_user).innerHTML = (current_user + ' is offline.' );
+        document.queryselector('#'+ current_user).style = ('color:black');
+        console.message('User went offline');
+    };*/
+
+</script>
+</html>
