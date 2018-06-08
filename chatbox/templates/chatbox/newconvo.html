@@ -12,7 +12,11 @@
     <input id="room-name-submit" type="button" value="Enter"/>
 </body>
 <script>
-    var user = {{ user }};
+    /*var user = {{ user }};*/
+
+    document.body.onload = function(e) {
+        console.log("Hello.....");
+    };
 
     document.querySelector('#room-name-input').focus();
     /*document.querySelector('#room-name-input').onkeyup = function(e) {
@@ -22,7 +26,8 @@
     };*/
 
     document.querySelector('#room-name-submit').onclick = function(e) {
-        var roomName = user + document.querySelector('#room-name-input').value;
+        var roomName = document.querySelector('#room-name-input').value;
+        console.log("ready...");
         window.location.pathname = '/chatbox/' + roomName + '/';
     };
 </script>

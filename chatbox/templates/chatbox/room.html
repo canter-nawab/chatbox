@@ -31,6 +31,7 @@
 <script>
     var roomName = {{ room_name_json }};
     var current_user = {{ user_ob }};
+
     var chatSocket = new WebSocket(
         'ws://' + window.location.host +
         '/ws/chatbox/' + roomName + '/'
@@ -44,8 +45,8 @@
     chatSocket.onopen = function(e) {
         document.querySelector('#online_users').innerHTML += ('online...<br>');
         chatSocket.send(JSON.stringify({
+            'user': current_user,
             'message': None,
-            'user': current_user
         }));
 
         var init = JSON.parse(e.data);

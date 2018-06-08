@@ -9,17 +9,20 @@
     <body>
         <form action="{% url 'chatbox:loggedin' %}" method="post">
             {% csrf_token %}
-            <input type="text" name="roll_no" id="roll_no"> <br>
-            <input type="text" name="username" id="user_name"> <br>
-            <input type="password" name="password" id="user_password"> <br>
+            <input type="text" name="roll_no" id="roll_no" placeholder="Roll No."><br>
+            <input type="text" name="username" id="user_name" placeholder="User Name"><br>
+            <input type="password" name="password" id="user_password" placeholder="Password"><br>
             <input type="submit" value="Enter" id="login">
         </form>
     </body>
 
     <script>
-            document.querySelector('#user_password').onblur = function() {
+        document.body.onload = function (e) {
+            console.log("hey.........");
+        };
+            /*document.querySelector('#user_password').onblur = function() {
                 var original = document.queryselector('#user_password').value;
-            };
+            };*/
 
            /* document.querySelector('#login').onclick = function (e) {
                 documen

@@ -21,7 +21,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         #user_list.append(connected)
         #await self.receive()
 
-        user_list.append()
+        #user_list.append()
 
         await self.channel_layer.group_send(
             self.room_group_name,
